@@ -1,66 +1,43 @@
-#include <windows.h>
-#include <gl\glut.h>
-GLfloat x1 = 0.0f;
-GLfloat y1 = 0.0f;
-GLsizei rsize = 50.0f;
-GLfloat xstep = 1.0f;
-GLfloat ystep = 1.0f;
-GLfloat window_width;
-GLfloat window_height;
+#include "pch.h"
+#include "Rect.h"
 
+GLfloat window_width = 0.0f;
+GLfloat window_height = 0.0f;
 
-
-//class Rect{
-//public:
-//	GLfloat x = 0.0f;
-//	GLfloat y = 0.0f;
-//	GLsizei rsize = 50.0f;
-//	GLfloat xstep = 1.0f;
-//	GLfloat ystep = 1.0f;
-//public:
-//	Rect(GLfloat _x, GLfloat _y){
-//		x = _x;
-//		y = _y;
-//	}
-//
-//	static void TimerFunction(int value)
-//	{
-//		if (x > window_width - rsize || x < -window_width)
-//			xstep = -xstep;
-//		if (y>window_height - rsize || y< -window_height)
-//			ystep = -ystep;
-//		if (x > window_width - rsize)
-//			x = window_width - rsize - 1;
-//		if (y > window_height - rsize)
-//			y = window_height - rsize - 1;
-//		x += xstep;
-//		y += ystep;
-//		glutPostRedisplay();
-//		glutTimerFunc(33, TimerFunction, 1);
-//	}
-//};
+std::vector<Rect> rects;
 
 void TimerFunction(int value)
 {
-	if (x1> window_width - rsize || x1 < -window_width)
-		xstep = -xstep;
-	if (y1>window_height - rsize || y1< -window_height)
-		ystep = -ystep;
-	if (x1 > window_width - rsize)
-		x1 = window_width - rsize - 1;
-	if (y1 >window_height - rsize)
-		y1 = window_height - rsize - 1;
-	x1 += xstep;
-	y1 += ystep;
-	glutPostRedisplay();
+
 	glutTimerFunc(33, TimerFunction, 1);
+}
+
+void Update()
+{
+	// 균일한 속도를 위해 dt를 구한다.
+	// 0으로 빠지는 것을 줄이기 위해 추가.
+	Sleep(5);
+	static int prevTime = GetTickCount();
+	int curTime = GetTickCount();
+	float dt = (float)(curTime - prevTime)/1000;
+	prevTime = curTime;
+
+	// Rect 위치 갱신.
+	for (auto& rect : rects)
+	{
+		rect.Update(dt);
+	}
+
+	glutPostRedisplay();
 }
 
 void RenderScene(void)
 {
 	glClear(GL_COLOR_BUFFER_BIT);
-	glColor3f(1.0f, 0.0f, 0.0f);
-	glRectf(x1, y1, x1 + rsize, y1 + rsize);
+	for (auto& rect : rects)
+	{
+		rect.Render();
+	}
 	glutSwapBuffers();
 }
 
@@ -68,7 +45,32 @@ void RenderScene(void)
 void SetupRC(void)
 {
 	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+
+	Rect r1(-100.0f, -100.0f);
+	r1.SetColor(1.0f, 0.0f, 0.0f);
+	r1.SetSpeed(50.0f, 50.f);
+
+	Rect r2(0.0f, 0.0f);
+	r2.SetColor(0.0f, 1.0f, 0.0f);
+	r2.SetSpeed(55.0f, 15.f);
+
+	Rect r3(100.0f, 100.0f);
+	r3.SetColor(0.0f, 0.0f, 1.0f);
+	r3.SetSpeed(15.0f, 40.f);
+
+	Rect r4(200.0f, 100.0f);
+	r4.SetColor(0.0f, 1.0f, 1.0f);
+	r4.SetSpeed(30.0f, 75.0f);
+
+	rects.push_back(r1);
+	rects.push_back(r2);
+	rects.push_back(r3);
+	rects.push_back(r4);
+
+	//int idx;
+	//rects.erase(rects.begin() + idx);
 }
+
 void ChangeSize(GLsizei w, GLsizei h)
 {
 	glViewport(0, 0, w, h);
@@ -102,8 +104,11 @@ void main(void)
 	glutDisplayFunc(RenderScene);
 	// 윈도우 크기가 변경될 때마다 호출되는 함수.
 	glutReshapeFunc(ChangeSize);
+
+	glutIdleFunc(Update);
+
 	// timer
-	glutTimerFunc(2000, TimerFunction, 1);
+	//glutTimerFunc(2000, TimerFunction, 1);
 	// 초기 setup
 	SetupRC();
 	//glutMain 함수호출, glut의 메인 framework함수 호출
