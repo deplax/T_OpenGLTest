@@ -13,6 +13,28 @@ void SetupRC()
 	glEnable(GL_DEPTH_TEST);  //add
 	glFrontFace(GL_CCW);      //add
 	glEnable(GL_CULL_FACE);   //add
+
+	glEnable(GL_LIGHTING);
+
+	GLfloat amb[] = { 0.3f, 0.3f, 0.3f };
+	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, amb);
+	glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
+
+	GLfloat diff[] = { 0.7f, 0.7f, 0.7f };
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, diff);
+	glEnable(GL_LIGHT0);
+	glEnable(GL_COLOR_MATERIAL);
+	glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
+
+	GLfloat specref[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+	glLightfv(GL_LIGHT0, GL_SPECULAR, specref);
+	glMaterialfv(GL_FRONT, GL_SPECULAR, specref);
+	glMateriali(GL_FRONT, GL_SHININESS, 8);
+
+	// 이게 glTranslatef의 영향을 받지 않음.
+	// 원래 -300.f를 줘야 하는데 태양이 꾸리꾸리 보여서 조금 앞으로 당겨놓음.
+	GLfloat lightPos[] = { 0.0f, 0.0f, -250.0f, 1.0f };
+	glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
 }
 
 void Update()

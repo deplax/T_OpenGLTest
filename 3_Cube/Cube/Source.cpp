@@ -5,6 +5,7 @@
 void SetupRC()
 {
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+
 	glEnable(GL_DEPTH_TEST);  //add
 	glFrontFace(GL_CCW);      //add
 	glEnable(GL_CULL_FACE);   //add
@@ -17,35 +18,46 @@ void TimerFunc(int value)
 }
 void ChangeSize(int w, int h)
 {
-	GLfloat nRange = 150.0f;
+	GLfloat fAspect;
 	glViewport(0, 0, w, h);
+	fAspect = (GLfloat)w / (GLfloat)h;
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	if (w <= h)
-		glOrtho(-nRange, nRange, -nRange*h / w, nRange*h / w, -nRange*2.0f, nRange*2.0f);	//add
-	else
-		glOrtho(-nRange*w / h, nRange*w / h, -nRange, nRange, -nRange*2.0f, nRange*2.0f);	//add
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
+	gluPerspective(80.0f, fAspect, 1.0f, 500.0f);
 }
 
 void RenderScene(void)
 {
-	glClear(GL_COLOR_BUFFER_BIT);
-	// Enable smooth shading 􏰄 􏰄 􏰄 glShadeModel(GL_SMOOTH);
-	glBegin(GL_TRIANGLES);
-	// Red Apex
-	glColor3ub((GLubyte)255, (GLubyte)0, (GLubyte)0);
-	glVertex3f(0.0f, 200.0f, 0.0f);
-	// Green on the right bottom corner
-	glColor3ub((GLubyte)0, (GLubyte)255, (GLubyte)0);
-	glVertex3f(200.0f, -70.0f, 0.0f);
-	// Blue on the left bottom corner
-	glColor3ub((GLubyte)0, (GLubyte)0, (GLubyte)255);
-	glVertex3f(-200.0f, -70.0f, 0.0f);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clear color and depth buffers
+	glMatrixMode(GL_MODELVIEW);     // To operate on model-view matrix
+	glLoadIdentity();
+	glTranslatef(0.0f, 0.0f, -300.0f);
+
+	float s = 50;
+
+	glRotatef(45.0f, 1.0f, 0.0f, 0.0f);
+	glRotatef(-45.0f, 0.0f, 1.0f, 0.0f);
+	glBegin(GL_QUADS);
+		//front
+		glVertex3f(-s, s, s);
+		glVertex3f(-s, -s, s);
+		glVertex3f(s, -s, s);
+		glVertex3f(s, s, s);
+		//right
+		glVertex3f(s, s, s);
+		glVertex3f(s, -s, s);
+		glVertex3f(s, -s, -s);
+		glVertex3f(s, s, -s);
+		//top
+		glVertex3f(-s, s, s);
+		glVertex3f(s, s, s);
+		glVertex3f(s, s, -s);
+		glVertex3f(-s, s, -s);
 	glEnd();
-	// Flush drawing commands
-	glutSwapBuffers();
+
+
+	glutSwapBuffers();  // Swap the front and back frame buffers (double buffering)
+
 }
 
 void main(void)
