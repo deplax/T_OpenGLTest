@@ -6,10 +6,57 @@ GLfloat window_height = 0.0f;
 
 std::vector<Rect> rects;
 
-void TimerFunction(int value)
-{
+void CollisionDetect(std::vector<Rect>& rects, int dt){
+	for (auto& rect : rects)
+	{
+		for (auto& r : rects)
+		{
+			// 나 자신이면 그냥 패스.
+			if (&rect == &r)
+				continue;
 
-	glutTimerFunc(33, TimerFunction, 1);
+			Rect *xfirstBlock;
+			Rect *xlastBlock;
+			Rect *yfirstBlock;
+			Rect *ylastBlock;
+
+			// 누가 더 앞에 있는 블럭인지 찾는다.
+			if (rect.x > r.x)
+			{
+				xfirstBlock = &r;
+				xlastBlock = &rect;
+			}
+			else{
+				xfirstBlock = &rect;
+				xlastBlock = &r;
+			}
+
+			if (rect.y > r.y)
+			{
+				yfirstBlock = &r;
+				ylastBlock = &rect;
+			}
+			else{
+				yfirstBlock = &rect;
+				ylastBlock = &r;
+			}
+
+			// 충돌검사
+			if (xlastBlock->x - (xfirstBlock->x + xfirstBlock->rsize) < 0 && 
+				(ylastBlock->y - ylastBlock->prevyStep) - (yfirstBlock->y - yfirstBlock->prevyStep + yfirstBlock->rsize) < 0){
+				xlastBlock->x = xfirstBlock->x + xfirstBlock->rsize;
+				rect.xstep *= -1;
+				r.xstep *= -1;
+			}
+
+			if (ylastBlock->y - (yfirstBlock->y + yfirstBlock->rsize) < 0 &&
+				(xlastBlock->x - xlastBlock->prevxStep) - (xfirstBlock->x - xfirstBlock->prevxStep + xfirstBlock->rsize) < 0){
+				ylastBlock->y = yfirstBlock->y + yfirstBlock->rsize;
+				rect.ystep *= -1;
+				r.ystep *= -1;	
+			}
+		}
+	}
 }
 
 void Update()
@@ -19,15 +66,14 @@ void Update()
 	Sleep(5);
 	static int prevTime = GetTickCount();
 	int curTime = GetTickCount();
-	float dt = (float)(curTime - prevTime)/1000;
+	float dt = (float)(curTime - prevTime) / 1000;
 	prevTime = curTime;
 
 	// Rect 위치 갱신.
 	for (auto& rect : rects)
-	{
 		rect.Update(dt);
-	}
 
+	CollisionDetect(rects, dt);
 	glutPostRedisplay();
 }
 
@@ -54,11 +100,11 @@ void SetupRC(void)
 	r2.SetColor(0.0f, 1.0f, 0.0f);
 	r2.SetSpeed(55.0f, 15.f);
 
-	Rect r3(100.0f, 100.0f);
+	Rect r3(-70.0f, 0.0f);
 	r3.SetColor(0.0f, 0.0f, 1.0f);
 	r3.SetSpeed(15.0f, 40.f);
 
-	Rect r4(200.0f, 100.0f);
+	Rect r4(0.0f, 70.0f);
 	r4.SetColor(0.0f, 1.0f, 1.0f);
 	r4.SetSpeed(30.0f, 75.0f);
 
@@ -79,17 +125,20 @@ void ChangeSize(GLsizei w, GLsizei h)
 	if (w <= h)
 	{
 		window_width = 100.0f;
-		window_height = 100.0f*h / w;
+		window_height = 100.0f * h / w;
 		glOrtho(-100.0f, 100.0f, -window_height, window_height, 1.0, -1.0);
 	}
 	else
 	{
-		window_width = 100.0f*w / h;
+		window_width = 100.0f * w / h;
 		window_height = 100.0f;
 		glOrtho(-window_width, window_width, -100.0f, 100.0f, 1.0, -1.0);
 	}
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
+
+	printf("window_width : %f\t", window_width);
+	printf("window_height : %f\n", window_height);
 }
 
 void main(void)

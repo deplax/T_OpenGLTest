@@ -42,7 +42,9 @@ void Rect::Update(float dt)
 	x += xstep * dt;
 	y += ystep * dt;
 
-	printf("dt : %f\n", dt);
+	prevxStep = xstep * dt;
+	prevyStep = ystep * dt;
+
 }
 
 void Rect::Render()
