@@ -28,23 +28,14 @@ void Update()
 	glutPostRedisplay();
 }
 
-void TimerFunc(int value)
-{
-	glutPostRedisplay();
-	glutTimerFunc(100, TimerFunc, 1);
-}
 void ChangeSize(int w, int h)
 {
-	GLfloat nRange = 150.0f;
+	GLfloat fAspect;
 	glViewport(0, 0, w, h);
+	fAspect = (GLfloat)w / (GLfloat)h;
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	if (w <= h)
-		glOrtho(-nRange, nRange, -nRange*h / w, nRange*h / w, -nRange*2.0f, nRange*2.0f);	//add
-	else
-		glOrtho(-nRange*w / h, nRange*w / h, -nRange, nRange, -nRange*2.0f, nRange*2.0f);	//add
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
+	gluPerspective(60.0f, fAspect, 100.0f, 500.0f);
 }
 
 void RenderScene() // add – draw 3 sphere 
@@ -57,7 +48,7 @@ void RenderScene() // add – draw 3 sphere
 	glLoadIdentity();
 
 	//sun
-	glTranslatef(0.0f, 0.0f, -100.0f);
+	glTranslatef(0.0f, 0.0f, -300.0f);
 	glColor3ub(255, 0, 0);
 	glutSolidSphere(15.0f, 15, 15);
 	glPushMatrix();
