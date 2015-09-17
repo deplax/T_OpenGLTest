@@ -5,10 +5,11 @@ Rect::Rect()
 {
 }
 
-Rect::Rect(GLfloat _x, GLfloat _y)
+Rect::Rect(GLfloat _x, GLfloat _y, GLsizei _rsize)
 {
 	x = _x;
 	y = _y;
+	rsize = _rsize;
 }
 
 Rect::~Rect()

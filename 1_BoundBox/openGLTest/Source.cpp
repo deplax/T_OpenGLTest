@@ -92,19 +92,19 @@ void SetupRC(void)
 {
 	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 
-	Rect r1(-100.0f, -100.0f);
+	Rect r1(-100.0f, -100.0f, 50.0f);
 	r1.SetColor(1.0f, 0.0f, 0.0f);
 	r1.SetSpeed(50.0f, 50.f);
 
-	Rect r2(0.0f, 0.0f);
+	Rect r2(0.0f, 0.0f, 30.0f);
 	r2.SetColor(0.0f, 1.0f, 0.0f);
 	r2.SetSpeed(55.0f, 15.f);
 
-	Rect r3(-70.0f, 0.0f);
+	Rect r3(-70.0f, 0.0f, 35.0f);
 	r3.SetColor(0.0f, 0.0f, 1.0f);
 	r3.SetSpeed(15.0f, 40.f);
 
-	Rect r4(0.0f, 70.0f);
+	Rect r4(0.0f, 70.0f, 10.0f);
 	r4.SetColor(0.0f, 1.0f, 1.0f);
 	r4.SetSpeed(30.0f, 75.0f);
 

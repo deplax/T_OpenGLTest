@@ -7,7 +7,7 @@ class Rect
 {
 public:
 	Rect();
-	Rect(GLfloat _x, GLfloat _y);
+	Rect(GLfloat _x, GLfloat _y, GLsizei _rsize);
 
 	~Rect();
 
