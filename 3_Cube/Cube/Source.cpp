@@ -23,7 +23,7 @@ void ChangeSize(int w, int h)
 	fAspect = (GLfloat)w / (GLfloat)h;
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(80.0f, fAspect, 1.0f, 500.0f);
+	gluPerspective(40.0f, fAspect, 1.0f, 500.0f);
 }
 
 void RenderScene(void)
@@ -39,19 +39,31 @@ void RenderScene(void)
 	glRotatef(-45.0f, 0.0f, 1.0f, 0.0f);
 	glBegin(GL_QUADS);
 		//front
+		glColor3ub((GLubyte)0, (GLubyte)255, (GLubyte)255);
 		glVertex3f(-s, s, s);
+		glColor3ub((GLubyte)0, (GLubyte)255, (GLubyte)0);
 		glVertex3f(-s, -s, s);
+		glColor3ub((GLubyte)0, (GLubyte)0, (GLubyte)0);
 		glVertex3f(s, -s, s);
+		glColor3ub((GLubyte)0, (GLubyte)0, (GLubyte)255);
 		glVertex3f(s, s, s);
 		//right
+		glColor3ub((GLubyte)0, (GLubyte)0, (GLubyte)255);
 		glVertex3f(s, s, s);
+		glColor3ub((GLubyte)0, (GLubyte)0, (GLubyte)0);
 		glVertex3f(s, -s, s);
+		glColor3ub((GLubyte)255, (GLubyte)0, (GLubyte)0);
 		glVertex3f(s, -s, -s);
+		glColor3ub((GLubyte)255, (GLubyte)0, (GLubyte)255);
 		glVertex3f(s, s, -s);
 		//top
+		glColor3ub((GLubyte)0, (GLubyte)255, (GLubyte)255);
 		glVertex3f(-s, s, s);
+		glColor3ub((GLubyte)0, (GLubyte)0, (GLubyte)255);
 		glVertex3f(s, s, s);
+		glColor3ub((GLubyte)255, (GLubyte)0, (GLubyte)255);
 		glVertex3f(s, s, -s);
+		glColor3ub((GLubyte)255, (GLubyte)255, (GLubyte)255);
 		glVertex3f(-s, s, -s);
 	glEnd();
 
